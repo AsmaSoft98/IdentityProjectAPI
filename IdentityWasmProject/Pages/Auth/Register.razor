@@ -1,0 +1,47 @@
+﻿@page "/auth/register"
+@using System.Text.RegularExpressions;
+@layout AuthLayout
+
+<br />
+<EditForm Model="_model" OnValidSubmit="HandleSubmit">
+     <DataAnnotationsValidator></DataAnnotationsValidator>
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Sign In</MudText>
+              
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+             @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+               <MudAlert Style="max-width: 500px; align-items: baseline;"
+                     NoIcon="false" Severity="Severity.Error" Variant="Variant.Filled" 
+                     ShowCloseIcon="true" CloseIconClicked="(() => HideError())"Class="mt-4">
+                     <MudText Typo="@Typo.body1">@_errorMessage</MudText>
+              </MudAlert>
+	        }
+            <MudTextField T="string" @bind-Value="_model.FirstName" Required="true" 
+                            RequiredError="First name is required!" Label="First Name " 
+                            Variant="Variant.Outlined" Class="mt-4"></MudTextField>
+            <MudTextField T="string" @bind-Value="_model.LastName" Required="true" 
+                            RequiredError="Last name is required!" Label="Last Name " 
+                            Variant="Variant.Outlined" Class="mt-4"></MudTextField>
+            <MudTextField T="string" @bind-Value="_model.Email" Required="true" 
+                            RequiredError="Email is required!" Label="E-mail "
+                            Variant="Variant.Outlined" Class="mt-4" Fo></MudTextField>
+            <MudTextField T="string" Label="Password " @bind-Value="_model.Password" Variant="Variant.Outlined"
+                            InputType="InputType.Password"
+                            Required="true"
+                            RequiredError="Password is required!" Class="mt-4" />
+            <MudTextField T="string"
+                           Label="Enter password again " @bind-Value="_model.ConfirmPassword" Variant="Variant.Outlined" 
+                           InputType="InputType.Password"
+                           Class="mt-4" />
+            <ValidationSummary />
+     </MudCardContent>
+    <MudCardActions>
+      <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(_isBusy)" OnClick="HandleSubmit" Size="Size.Large" FullWidth="true" Class="mt-4">Register</MudButton>
+    </MudCardActions>
+</MudCard>
+</EditForm>
