@@ -1,0 +1,47 @@
+﻿@using System.Security.Claims
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager _navigationManager
+@inject CustomAuthenticationState _customAuthenticationProvider
+
+<AuthorizeView>
+	<Authorized>
+		<MudMenu>
+			<ActivatorContent>
+				<MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Primary">Welcome @context.User.Identity.Name!</MudChip>
+			</ActivatorContent>
+			<ChildContent>
+                <MudMenuItem  >Account</MudMenuItem>
+				<MudMenuItem OnClick="LogOutAsync">Sign Out</MudMenuItem>
+			</ChildContent>
+		</MudMenu>
+	</Authorized>
+	<NotAuthorized>
+		<MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+            <ActivatorContent>
+                <MudIcon Icon="@Icons.Material.Outlined.PowerSettingsNew" />
+            </ActivatorContent>
+            <ChildContent>
+                <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" OnClick="LogOutAsync" Href="/auth/login" />
+            </ChildContent>
+        </MudMenu>
+	</NotAuthorized>
+</AuthorizeView>
+
+@code 
+{
+	
+    protected override async Task OnInitializedAsync()
+    {
+        //var authstate = await _getAuthenticationStateAsync.GetAuthenticationStateAsync();
+        //var user = authstate.User;
+        //var username = user.Id();
+
+        //_userDetails = await _httpClient.GetFromJsonAsync<AccountDetailsViewModel>($"api/account/{username}") ?? new AccountDetailsViewModel();
+    }
+	private async Task LogOutAsync()
+	{
+		await _localStorageService.RemoveItemAsync("token");
+		await _customAuthenticationProvider.GetAuthenticationStateAsync();
+		_navigationManager.NavigateTo("/auth/login");
+	}
+}
